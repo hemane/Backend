@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28922.388
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeMaNe.Web", "HeMaNe.Web\HeMaNe.Web.csproj", "{4E51A652-1F9A-4E91-B8F2-B8025EF415D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeMaNe.Shared", "HeMaNe.Shared\HeMaNe.Shared.csproj", "{87EA6AA1-071C-447B-87C0-D35B83D32450}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4E51A652-1F9A-4E91-B8F2-B8025EF415D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E51A652-1F9A-4E91-B8F2-B8025EF415D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E51A652-1F9A-4E91-B8F2-B8025EF415D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E51A652-1F9A-4E91-B8F2-B8025EF415D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87EA6AA1-071C-447B-87C0-D35B83D32450}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87EA6AA1-071C-447B-87C0-D35B83D32450}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87EA6AA1-071C-447B-87C0-D35B83D32450}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87EA6AA1-071C-447B-87C0-D35B83D32450}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {925BF0B9-1044-4F6B-A823-B1BC047FB87B}
+	EndGlobalSection
+EndGlobal
