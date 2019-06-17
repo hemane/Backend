@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace HeMaNe.Shared.TransferObjects
+﻿namespace HeMaNe.Shared.TransferObjects
 {
     public class TeamDto
     {
-        public LeagueDto League { get; set; }
-
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int ClubId { get; set; }
+        public int LeagueId { get; set; }
     }
 }

@@ -3,14 +3,16 @@ using System;
 using HeMaNe.Web.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HeMaNe.Web.Migrations
 {
     [DbContext(typeof(HemaneContext))]
-    partial class HemaneContextModelSnapshot : ModelSnapshot
+    [Migration("20190603074716_TeamsMatch")]
+    partial class TeamsMatch
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,15 +26,9 @@ namespace HeMaNe.Web.Migrations
 
                     b.Property<string>("City");
 
-                    b.Property<int?>("ManagerId");
-
                     b.Property<string>("Name");
 
-                    b.Property<string>("Postcode");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ManagerId");
 
                     b.ToTable("Clubs");
                 });
@@ -51,8 +47,6 @@ namespace HeMaNe.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Name");
 
                     b.Property<int?>("SportId");
 
@@ -111,8 +105,6 @@ namespace HeMaNe.Web.Migrations
 
                     b.Property<int?>("LeagueId");
 
-                    b.Property<string>("Name");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ClubId");
@@ -120,30 +112,6 @@ namespace HeMaNe.Web.Migrations
                     b.HasIndex("LeagueId");
 
                     b.ToTable("Teams");
-                });
-
-            modelBuilder.Entity("HeMaNe.Web.Database.Models.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Password");
-
-                    b.Property<string>("Username");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Username")
-                        .IsUnique();
-
-                    b.ToTable("User");
-                });
-
-            modelBuilder.Entity("HeMaNe.Web.Database.Models.Club", b =>
-                {
-                    b.HasOne("HeMaNe.Web.Database.Models.User", "Manager")
-                        .WithMany()
-                        .HasForeignKey("ManagerId");
                 });
 
             modelBuilder.Entity("HeMaNe.Web.Database.Models.League", b =>
@@ -168,7 +136,7 @@ namespace HeMaNe.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("HeMaNe.Web.Database.Models.Team", "Team")
-                        .WithMany("MatchTeams")
+                        .WithMany("Match")
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

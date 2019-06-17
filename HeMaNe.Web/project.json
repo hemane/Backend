@@ -1,0 +1,6 @@
+{
+  "name": "HeMaNe",
+  "buildOptions": {
+    "emitEntryPoint": true
+  }
+}

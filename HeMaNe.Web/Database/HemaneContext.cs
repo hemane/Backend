@@ -23,5 +23,27 @@ namespace HeMaNe.Web.Database
         public DbSet<League> Leagues { get; set; }
         public DbSet<Sport> Sports { get; set; }
         public DbSet<Team> Teams { get; set; }
+        public DbSet<Match> Matches { get; set; }
+        public DbSet<MatchTeam> MatchTeams { get; set; }
+        public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<MatchTeam>(e =>
+            {
+                e.HasKey(t => new { t.TeamId, t.MatchId });
+                e.HasOne(t => t.Team)
+                    .WithMany(t => t.MatchTeams)
+                    .HasForeignKey(t => t.TeamId);
+
+                e.HasOne(t => t.Match)
+                    .WithMany(t => t.Teams)
+                    .HasForeignKey(t => t.MatchId);
+            });
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
+        }
     }
 }
