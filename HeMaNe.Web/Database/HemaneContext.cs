@@ -4,18 +4,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HeMaNe.Web.Database.Models;
+using HeMaNe.Web.Helpers;
+using Microsoft.Extensions.Options;
 
 namespace HeMaNe.Web.Database
 {
     public class HemaneContext : DbContext
     {
-        public HemaneContext(DbContextOptions x) : base(x)
+        private readonly IOptions<AppSettings> _appSettings;
+
+        public HemaneContext(DbContextOptions x, IOptions<AppSettings> appSettings) : base(x)
         {
+            _appSettings = appSettings;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql("Server=localhost;Database=hemane;Uid=root;"); // ;Pwd=myPassword
+            optionsBuilder.UseMySql(this._appSettings.Value.ConnectionString);
         }
 
         public DbSet<Club> Clubs { get; set; }

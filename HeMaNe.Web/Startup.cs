@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -33,7 +34,6 @@ namespace HeMaNe.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<HemaneContext>();
 
             services.AddMvc(config =>
             {
@@ -68,8 +68,20 @@ namespace HeMaNe.Web
                     };
                 });
 
-
+            // Database
             services.AddDbContext<HemaneContext>();
+
+            using (var context = services.BuildServiceProvider().GetService<HemaneContext>())
+            {
+                context.Database.Migrate();
+            }
+
+            // Services
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IClubService, ClubService>();
+            services.AddScoped<ILeagueService, LeagueService>();
+            services.AddScoped<ISportService, SportService>();
+            services.AddScoped<ITeamService, TeamService>();
             services.AddScoped<IUserService, UserService>();
 
         }
