@@ -11,6 +11,7 @@ namespace HeMaNe.Web.Service
         Task<ClubDto> GetAsync(int id);
         Task SaveAsync(ClubDto club);
         Task DeleteAsync(int id);
-        Task<bool> CanSave(ClubDto clubDto);
+        Task<bool> HasAccess(ClubDto clubDto);
+        Task<bool> HasAccess(int id);
     }
 }

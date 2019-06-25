@@ -61,9 +61,15 @@ namespace HeMaNe.Web.Service.Concrete
             await _context.SaveChangesAsync();
         }
 
-        public Task<bool> CanSave(LeagueDto leagueDto)
+        public Task<bool> HasAccess(LeagueDto leagueDto)
         {
             return new Task<bool>(() => this._userService.CurrentUser().Group == Group.Administrator);
+        }
+
+        public async Task<bool> HasAccess(int id)
+        {
+            var obj = await this.GetAsync(id);
+            return await this.HasAccess(obj);
         }
     }
 }

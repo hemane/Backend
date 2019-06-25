@@ -13,6 +13,7 @@ namespace HeMaNe.Web.Service
         Task<SportDto> GetAsync(int id);
         Task SaveAsync(SportDto sport);
         Task DeleteAsync(int id);
-        Task<bool> CanSave(SportDto sportDto);
+        Task<bool> HasAccess(SportDto sportDto);
+        Task<bool> HasAccess(int id);
     }
 }

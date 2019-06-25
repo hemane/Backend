@@ -64,7 +64,7 @@ namespace HeMaNe.Web.Service.Concrete
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> CanSave(ClubDto clubDto)
+        public async Task<bool> HasAccess(ClubDto clubDto)
         {
             // Neuer Club
             if (clubDto.Id == 0)
@@ -82,6 +82,12 @@ namespace HeMaNe.Web.Service.Concrete
             // Manger vom Club
             var club = await this.GetSingleClubAsync(clubDto.Id);
             return club.Manager.Id == user.Id;
+        }
+
+        public async Task<bool> HasAccess(int id)
+        {
+            var obj = await this.GetAsync(id);
+            return await this.HasAccess(obj);
         }
     }
 }

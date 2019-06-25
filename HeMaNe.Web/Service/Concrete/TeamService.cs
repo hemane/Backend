@@ -62,7 +62,7 @@ namespace HeMaNe.Web.Service.Concrete
             await this._context.SaveChangesAsync();
         }
 
-        public async Task<bool> CanSave(TeamDto teamDto)
+        public async Task<bool> HasAccess(TeamDto teamDto)
         {
             // Administrator
             var user = this._userService.CurrentUser();
@@ -74,6 +74,12 @@ namespace HeMaNe.Web.Service.Concrete
             // Manger vom Club hinter dem Team
             var club = await this._clubService.GetAsync(teamDto.ClubId);
             return club.ManagerId == user.Id;
+        }
+
+        public async Task<bool> HasAccess(int id)
+        {
+            var obj = await this.GetAsync(id);
+            return await this.HasAccess(obj);
         }
     }
 }

@@ -11,5 +11,6 @@ namespace HeMaNe.Web.Service
         User AuthUser(UserDto user);
         bool ChangePassword(UserDto user, string newPassword);
         User CurrentUser();
+        ScopedFilter CurrentScope();
     }
 }

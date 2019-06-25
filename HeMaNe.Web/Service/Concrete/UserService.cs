@@ -49,6 +49,11 @@ namespace HeMaNe.Web.Service.Concrete
                 u.Id == int.Parse(_httpContextAccessor.HttpContext.User.Identity.Name));
         }
 
+        public ScopedFilter CurrentScope()
+        {
+            return this.CurrentUser().Group == Group.Administrator ? ScopedFilter.All : ScopedFilter.Manager;
+        }
+
         private static void ComputeHash(UserDto user)
         {
             using (var sha = SHA256.Create())
