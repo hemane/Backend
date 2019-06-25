@@ -11,5 +11,6 @@ namespace HeMaNe.Web.Service
         Task<ClubDto> GetAsync(int id);
         Task SaveAsync(ClubDto club);
         Task DeleteAsync(int id);
+        Task<bool> CanSave(ClubDto clubDto);
     }
 }

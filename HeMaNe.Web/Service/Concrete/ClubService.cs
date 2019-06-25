@@ -63,5 +63,25 @@ namespace HeMaNe.Web.Service.Concrete
             _context.Clubs.Remove(await this.GetSingleClubAsync(id));
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> CanSave(ClubDto clubDto)
+        {
+            // Neuer Club
+            if (clubDto.Id == 0)
+            {
+                return true;
+            }
+
+            // Administrator
+            var user = this._userService.CurrentUser();
+            if (user.Group == Group.Administrator)
+            {
+                return true;
+            }
+
+            // Manger vom Club
+            var club = await this.GetSingleClubAsync(clubDto.Id);
+            return club.Manager.Id == user.Id;
+        }
     }
 }

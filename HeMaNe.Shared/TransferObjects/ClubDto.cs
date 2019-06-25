@@ -10,5 +10,6 @@ namespace HeMaNe.Shared.TransferObjects
         public string Name { get; set; }
         public string Postcode { get; set; }
         public string City { get; set; }
+        public int ManagerId { get; set; }
     }
 }

@@ -12,10 +12,12 @@ namespace HeMaNe.Web.Service.Concrete
     internal class LeagueService : ILeagueService
     {
         private readonly HemaneContext _context;
+        private readonly IUserService _userService;
 
-        public LeagueService(HemaneContext context)
+        public LeagueService(HemaneContext context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
         }
 
         public async Task<IEnumerable<LeagueDto>> GetAsync()
@@ -57,6 +59,11 @@ namespace HeMaNe.Web.Service.Concrete
         {
             _context.Leagues.Remove(await this.GetSingleLeagueAsync(id));
             await _context.SaveChangesAsync();
+        }
+
+        public Task<bool> CanSave(LeagueDto leagueDto)
+        {
+            return new Task<bool>(() => this._userService.CurrentUser().Group == Group.Administrator);
         }
     }
 }

@@ -12,7 +12,8 @@ namespace HeMaNe.Web.Extensions
                 Id = club.Id,
                 Name = club.Name,
                 City = club.City,
-                Postcode = club.Postcode
+                Postcode = club.Postcode,
+                ManagerId = club.Manager.Id
             };
         }
     }

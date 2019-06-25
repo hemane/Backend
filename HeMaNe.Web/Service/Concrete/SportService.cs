@@ -12,10 +12,12 @@ namespace HeMaNe.Web.Service.Concrete
     internal class SportService : ISportService
     {
         private readonly HemaneContext _context;
+        private readonly IUserService _userService;
 
-        public SportService(HemaneContext context)
+        public SportService(HemaneContext context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
         }
 
 
@@ -57,6 +59,11 @@ namespace HeMaNe.Web.Service.Concrete
         {
             _context.Sports.Remove(await this.GetSingleSportById(id));
             await _context.SaveChangesAsync();
+        }
+
+        public Task<bool> CanSave(SportDto sportDto)
+        {
+            return new Task<bool>(() => this._userService.CurrentUser().Group == Group.Administrator);
         }
     }
 }

@@ -7,15 +7,19 @@ using HeMaNe.Web.Database.Models;
 using HeMaNe.Web.Extensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace HeMaNe.Web.Service
+namespace HeMaNe.Web.Service.Concrete
 {
     internal class TeamService : ITeamService
     {
         private readonly HemaneContext _context;
+        private readonly IUserService _userService;
+        private readonly IClubService _clubService;
 
-        public TeamService(HemaneContext context)
+        public TeamService(HemaneContext context, IUserService userService, IClubService clubService)
         {
             _context = context;
+            _userService = userService;
+            _clubService = clubService;
         }
 
         public async Task<IEnumerable<TeamDto>> GetAsync(ScopedFilter filter)
@@ -56,6 +60,20 @@ namespace HeMaNe.Web.Service
         {
             this._context.Teams.Remove(await this.GetTeamAsync(id));
             await this._context.SaveChangesAsync();
+        }
+
+        public async Task<bool> CanSave(TeamDto teamDto)
+        {
+            // Administrator
+            var user = this._userService.CurrentUser();
+            if (user.Group == Group.Administrator)
+            {
+                return true;
+            }
+
+            // Manger vom Club hinter dem Team
+            var club = await this._clubService.GetAsync(teamDto.ClubId);
+            return club.ManagerId == user.Id;
         }
     }
 }

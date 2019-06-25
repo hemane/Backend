@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using HeMaNe.Shared.TransferObjects;
+using HeMaNe.Web.Database.Models;
 
 namespace HeMaNe.Web.Service
 {
@@ -10,5 +11,6 @@ namespace HeMaNe.Web.Service
         Task<LeagueDto> GetAsync(int id);
         Task SaveAsync(LeagueDto league);
         Task DeleteAsync(int id);
+        Task<bool> CanSave(LeagueDto leagueDto);
     }
 }
