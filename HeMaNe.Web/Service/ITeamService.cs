@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using HeMaNe.Shared.TransferObjects;
-using HeMaNe.Web.Database.Models;
 
 namespace HeMaNe.Web.Service
 {
