@@ -9,12 +9,12 @@ namespace HeMaNe.Web.Controllers
     [Route("[controller]")]
     [ApiController]
     [Authorize]
-    public class DayController : ControllerBase
+    public class DaysController : ControllerBase
     {
         private readonly IDayService _dayService;
         private readonly IUserService _userService;
 
-        public DayController(IDayService dayService, IUserService userService)
+        public DaysController(IDayService dayService, IUserService userService)
         {
             _dayService = dayService;
             _userService = userService;
