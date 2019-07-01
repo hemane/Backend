@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HeMaNe.Shared.TransferObjects;
+using HeMaNe.Web.Database.Models;
 using HeMaNe.Web.Extensions;
 using HeMaNe.Web.Service;
 using Microsoft.AspNetCore.Authorization;
@@ -17,10 +18,12 @@ namespace HeMaNe.Web.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly IUserService _userService;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, IUserService userService)
         {
             _authService = authService;
+            _userService = userService;
         }
 
         [HttpPost]
@@ -35,6 +38,20 @@ namespace HeMaNe.Web.Controllers
         [HttpGet]
         public IActionResult Info()
         {
+            return Ok();
+        }
+
+        [HttpPut]
+        public IActionResult Edit(UserDto userDto)
+        {
+            var currentUser = _userService.CurrentUser();
+            if (userDto.Username != currentUser.Username && currentUser.Group != Group.Administrator)
+            {
+                return Forbid();
+            }
+
+            this._userService.Edit(userDto);
+
             return Ok();
         }
     }

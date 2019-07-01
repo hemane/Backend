@@ -12,5 +12,8 @@ namespace HeMaNe.Web.Service
         bool ChangePassword(UserDto user, string newPassword);
         User CurrentUser();
         ScopedFilter CurrentScope();
+        Group CurrentGroup();
+        bool IsAdmin();
+        void Edit(UserDto userDto);
     }
 }

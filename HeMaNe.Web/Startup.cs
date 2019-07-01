@@ -77,12 +77,28 @@ namespace HeMaNe.Web
             }
 
             // Services
-            services.AddScoped<IAuthService, AuthService>();
+            /*services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IClubService, ClubService>();
             services.AddScoped<ILeagueService, LeagueService>();
             services.AddScoped<ISportService, SportService>();
             services.AddScoped<ITeamService, TeamService>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserService, UserService>();*/
+
+            // Reflektionsmagie, nicht schön und inperformant (beim Start), aber der Zweck heiligt die Mittel :)
+            // Alle Typen in dem Assembly suchen
+            var types = this.GetType().Assembly.GetTypes();
+
+            // Alle Typen in HeMaNe.Web.Service.Concrete inkl. Implementiere Schnittstelle auf HeMaNe.Web.Service suchen
+            var microServices = types.Where(t =>
+                t.Namespace == "HeMaNe.Web.Service.Concrete" && t.IsClass &&
+                t.GetInterfaces().Any(i => i.Namespace == "HeMaNe.Web.Service"))
+                .ToDictionary(t => t, t => t.GetInterfaces().Single(i => i.Namespace == "HeMaNe.Web.Service"));
+
+            foreach (var microService in microServices)
+            {
+                Console.WriteLine($"Registriere Microdienst {microService.Value}");
+                services.AddScoped(microService.Value, microService.Key);
+            }
 
         }
 

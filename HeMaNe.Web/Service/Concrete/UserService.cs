@@ -54,6 +54,29 @@ namespace HeMaNe.Web.Service.Concrete
             return this.CurrentUser().Group == Group.Administrator ? ScopedFilter.All : ScopedFilter.Manager;
         }
 
+        public Group CurrentGroup()
+        {
+            return this.CurrentUser().Group;
+        }
+
+        public bool IsAdmin()
+        {
+            return this.CurrentGroup() == Group.Administrator;
+        }
+
+        public void Edit(UserDto userDto)
+        {
+            var user = this._hemaneContext.Users.FirstOrDefault(u => u.Username == userDto.Username);
+            if (user == null) return;
+
+            if (!string.IsNullOrWhiteSpace(userDto.Password))
+            {
+                user.Password = userDto.Password;
+            }
+
+            this._hemaneContext.SaveChanges();
+        }
+
         private static void ComputeHash(UserDto user)
         {
             using (var sha = SHA256.Create())
