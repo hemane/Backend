@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.Operations;
 
 namespace HeMaNe.Web.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class DayController : ControllerBase
     {
