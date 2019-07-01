@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using HeMaNe.Shared.TransferObjects;
-using HeMaNe.Web.Database.Models;
 using HeMaNe.Web.Service;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Operations;
 
 namespace HeMaNe.Web.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class DayController : ControllerBase
     {
         private readonly IDayService _dayService;
