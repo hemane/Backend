@@ -43,11 +43,15 @@ namespace HeMaNe.Web
                 config.Filters.Add(new AuthorizeFilter(policy));
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            // configure strongly typed settings objects
+            //
+            // Config-Datei
+            //
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
-            // configure jwt authentication
+            //
+            // JWT
+            //
             var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
             services.AddAuthentication(x =>
@@ -68,23 +72,22 @@ namespace HeMaNe.Web
                     };
                 });
 
+            //
             // Database
+            //
             services.AddDbContext<HemaneContext>();
 
+            // Migriere, automatisch und ohne Skrupel
             using (var context = services.BuildServiceProvider().GetService<HemaneContext>())
             {
                 context.Database.Migrate();
             }
 
-            // Services
-            /*services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IClubService, ClubService>();
-            services.AddScoped<ILeagueService, LeagueService>();
-            services.AddScoped<ISportService, SportService>();
-            services.AddScoped<ITeamService, TeamService>();
-            services.AddScoped<IUserService, UserService>();*/
-
+            //
+            // Microservices
             // Reflektionsmagie, nicht schön und inperformant (beim Start), aber der Zweck heiligt die Mittel :)
+            //
+
             // Alle Typen in dem Assembly suchen
             var types = this.GetType().Assembly.GetTypes();
 
@@ -96,7 +99,7 @@ namespace HeMaNe.Web
 
             foreach (var microService in microServices)
             {
-                Console.WriteLine($"Registriere Microdienst {microService.Value}");
+                Console.WriteLine($"Registriere Microservice {microService.Value}");
                 services.AddScoped(microService.Value, microService.Key);
             }
 
@@ -105,6 +108,9 @@ namespace HeMaNe.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            //
+            // Jeder Host darf uns ansprechen
+            //
             app.UseCors(x => x
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
