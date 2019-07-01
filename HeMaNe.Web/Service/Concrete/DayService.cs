@@ -27,6 +27,8 @@ namespace HeMaNe.Web.Service.Concrete
 
         public async Task<int> CreateAsync(DayDto dto)
         {
+            if (!await this.ValidateDateTime(dto)) return -1;
+
             var model = dto.AsModel(this._context);
             model.Id = 0;
             await this._context.Days.AddAsync(model);
@@ -36,6 +38,7 @@ namespace HeMaNe.Web.Service.Concrete
 
         public async Task EditAsync(DayDto dto)
         {
+            if (!await this.ValidateDateTime(dto)) return;
             var model = await this.FindSingleDayAsync(dto.Id);
             dto.MapTo(model, this._context);
             await this._context.SaveChangesAsync();
@@ -50,6 +53,20 @@ namespace HeMaNe.Web.Service.Concrete
         private Task<Day> FindSingleDayAsync(int id)
         {
             return this._context.Days.SingleAsync(d => d.Id == id);
+        }
+
+        private async Task<bool> ValidateDateTime(DayDto dto)
+        {
+            var day = await this._context.Days.FirstOrDefaultAsync(d =>
+                d.DateTimeOffset == dto.DateTimeOffset && d.League.Id == dto.LeagueId);
+            return day == null;
+        }
+
+        private async Task<bool> ValidateDateTime(League league, DateTimeOffset dateTimeOffset)
+        {
+            var day = await this._context.Days.FirstOrDefaultAsync(d =>
+                d.DateTimeOffset == dateTimeOffset && d.League.Id == league.Id);
+            return day == null;
         }
     }
 }
