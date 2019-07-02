@@ -173,7 +173,7 @@ namespace HeMaNe.Web.Migrations
             modelBuilder.Entity("HeMaNe.Web.Database.Models.Match", b =>
                 {
                     b.HasOne("HeMaNe.Web.Database.Models.Day", "Day")
-                        .WithMany()
+                        .WithMany("Matches")
                         .HasForeignKey("DayId");
                 });
 

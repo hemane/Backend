@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HeMaNe.Web.Migrations
 {
     [DbContext(typeof(HemaneContext))]
-    [Migration("20190625063353_AddUserGroups")]
-    partial class AddUserGroups
+    [Migration("20190702063915_First")]
+    partial class First
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -175,7 +175,7 @@ namespace HeMaNe.Web.Migrations
             modelBuilder.Entity("HeMaNe.Web.Database.Models.Match", b =>
                 {
                     b.HasOne("HeMaNe.Web.Database.Models.Day", "Day")
-                        .WithMany()
+                        .WithMany("Matches")
                         .HasForeignKey("DayId");
                 });
 
