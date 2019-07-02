@@ -11,5 +11,11 @@ namespace HeMaNe.Web.Service
         Task<IEnumerable<MatchDto>> FindByDayAsync(int day);
         Task<int> CreateAsync(MatchDto dto);
         Task DeleteAsync(int id);
+        Task<MatchDto> FindById(int id);
+
+        Task<IEnumerable<MatchTeamDto>> FindMatchTeams(int matchId);
+        Task AddMatchTeam(MatchTeamDto dto);
+        Task RemoveMatchTeam(MatchTeamDto dto);
+        Task SetMatchTeamScore(MatchTeamDto dto);
     }
 }

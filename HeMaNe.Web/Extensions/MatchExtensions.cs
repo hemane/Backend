@@ -16,6 +16,18 @@ namespace HeMaNe.Web.Extensions
             };
         }
 
+        public static MatchTeamDto AsDto(this MatchTeam team)
+        {
+            return new MatchTeamDto
+            {
+                TeamId = team.TeamId,
+                MatchId = team.MatchId,
+                Score = team.Score,
+                ClubName = team.Team.Club.Name,
+                TeamName = team.Team.Name
+            };
+        }
+
         public static Match AsModel(this MatchDto dto, HemaneContext context)
         {
             return new Match

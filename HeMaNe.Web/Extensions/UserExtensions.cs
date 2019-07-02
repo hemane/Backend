@@ -16,6 +16,7 @@ namespace HeMaNe.Web.Extensions
                 Id = user.Id,
                 Username = user.Username,
                 Password = string.Empty,
+                Group = (int)user.Group
             };
         }
     }

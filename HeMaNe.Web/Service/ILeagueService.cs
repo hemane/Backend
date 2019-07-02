@@ -11,7 +11,8 @@ namespace HeMaNe.Web.Service
         Task<LeagueDto> GetAsync(int id);
         Task SaveAsync(LeagueDto league);
         Task DeleteAsync(int id);
-        Task<bool> HasAccess(LeagueDto leagueDto);
-        Task<bool> HasAccess(int id);
+        bool HasAccess(LeagueDto leagueDto);
+        bool HasAccess(int id);
+        Task<object> GetBySportAsync(int sport);
     }
 }

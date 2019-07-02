@@ -26,10 +26,22 @@ namespace HeMaNe.Web.Controllers
             return Ok(await _service.GetAsync(this._userService.CurrentScope()));
         }
 
+        [HttpGet("club/{club}")]
+        public async Task<IActionResult> ByClub(int club)
+        {
+            return Ok(await _service.GetByClubAsync(this._userService.CurrentScope(), club));
+        }
+
+        [HttpGet("forMatch/{match}")]
+        public async Task<IActionResult> ForMatch(int match)
+        {
+            return Ok(await _service.GetForMatchAsync(this._userService.CurrentScope(), match));
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> Index(int id)
         {
-            if (!await this._service.HasAccess(id))
+            if (!this._service.HasAccess(id))
             {
                 return Forbid();
             }
@@ -39,7 +51,7 @@ namespace HeMaNe.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Save([FromBody] TeamDto dto)
         {
-            if (!await this._service.HasAccess(dto))
+            if (!this._service.HasAccess(dto))
             {
                 return Forbid();
             }
@@ -50,7 +62,7 @@ namespace HeMaNe.Web.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            if (!await this._service.HasAccess(id))
+            if (!this._service.HasAccess(id))
             {
                 return Forbid();
             }

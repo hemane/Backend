@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using HeMaNe.Web.Database;
 using HeMaNe.Web.Helpers;
 using HeMaNe.Web.Service;
-using HeMaNe.Web.Service.Concrete;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -76,6 +75,7 @@ namespace HeMaNe.Web
             // Database
             //
             services.AddDbContext<HemaneContext>();
+            services.AddHttpContextAccessor();
 
             // Migriere, automatisch und ohne Skrupel
             using (var context = services.BuildServiceProvider().GetService<HemaneContext>())

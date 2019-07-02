@@ -31,17 +31,19 @@ namespace HeMaNe.Web.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Index(int id)
         {
-            if(!await this._service.HasAccess(id))
-            {
-                return Forbid();
-            }
             return Ok(await _service.GetAsync(id));
+        }
+
+        [HttpGet("sport/{sport}")]
+        public async Task<IActionResult> IndexBySport(int sport)
+        {
+            return Ok(await _service.GetBySportAsync(sport));
         }
 
         [HttpPost]
         public async Task<IActionResult> Save([FromBody] LeagueDto dto)
         {
-            if (!await this._service.HasAccess(dto))
+            if (!this._service.HasAccess(dto))
             {
                 return Forbid();
             }
@@ -52,7 +54,7 @@ namespace HeMaNe.Web.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            if (!await this._service.HasAccess(id))
+            if (!this._service.HasAccess(id))
             {
                 return Forbid();
             }

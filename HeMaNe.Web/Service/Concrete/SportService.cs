@@ -61,15 +61,15 @@ namespace HeMaNe.Web.Service.Concrete
             await _context.SaveChangesAsync();
         }
 
-        public Task<bool> HasAccess(SportDto sportDto)
+        public bool HasAccess(SportDto sportDto)
         {
-            return new Task<bool>(() => this._userService.CurrentUser().Group == Group.Administrator);
+            return this._userService.IsAdmin();
         }
 
-        public async Task<bool> HasAccess(int id)
+        public bool HasAccess(int id)
         {
-            var obj = await this.GetAsync(id);
-            return await this.HasAccess(obj);
+            var obj = this.GetAsync(id).Result;
+            return this.HasAccess(obj);
         }
     }
 }

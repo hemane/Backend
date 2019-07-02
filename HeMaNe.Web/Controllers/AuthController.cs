@@ -38,7 +38,7 @@ namespace HeMaNe.Web.Controllers
         [HttpGet]
         public IActionResult Info()
         {
-            return Ok();
+            return Ok(this._userService.CurrentUser().MapToUserDto());
         }
 
         [HttpPut]

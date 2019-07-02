@@ -6,5 +6,7 @@
         public string Name { get; set; }
         public int ClubId { get; set; }
         public int LeagueId { get; set; }
+        public string LeagueLabel { get; set; }
+        public string ClubLabel { get; set; }
     }
 }

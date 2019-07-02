@@ -15,6 +15,7 @@ namespace HeMaNe.Web.Extensions
                 Id = league.Id,
                 Name = league.Name,
                 SportId = league.Sport.Id,
+                SportLabel = league.Sport.Name
             };
         }
 

@@ -11,7 +11,10 @@ namespace HeMaNe.Web.Service
         Task<TeamDto> GetAsync(int id);
         Task SaveAsync(TeamDto team);
         Task DeleteAsync(int id);
-        Task<bool> HasAccess(TeamDto teamDto);
-        Task<bool> HasAccess(int id);
+        bool HasAccess(TeamDto teamDto);
+        bool HasAccess(int id);
+        Task<IEnumerable<TeamDto>> GetByClubAsync(ScopedFilter currentScope, int clubId);
+        Task<IEnumerable<TeamDto>> GetByLeagueAsync(ScopedFilter currentScope, int leagueId);
+        Task<IEnumerable<TeamDto>> GetForMatchAsync(ScopedFilter currentScope, int match);
     }
 }

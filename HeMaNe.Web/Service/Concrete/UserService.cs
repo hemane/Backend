@@ -1,13 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using HeMaNe.Shared.TransferObjects;
 using HeMaNe.Web.Database;
 using HeMaNe.Web.Database.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using Group = HeMaNe.Web.Database.Models.Group;
 
 namespace HeMaNe.Web.Service.Concrete
 {
@@ -24,10 +24,16 @@ namespace HeMaNe.Web.Service.Concrete
 
         public User AuthUser(UserDto userDto)
         {
-            ComputeHash(userDto);
+            var user = this._hemaneContext.Users.FirstOrDefault(u =>
+                u.Username == userDto.Username);
+            if (user == null)
+            {
+                return null;
+            }
 
-            return this._hemaneContext.Users.FirstOrDefault(u =>
-                u.Username == userDto.Username && u.Password == userDto.Password);
+            userDto.Id = user.Id;
+            ComputeHash(userDto);
+            return user.Password == userDto.Password ? user : null;
         }
 
         public bool ChangePassword(UserDto userDto, string newPassword)
@@ -66,22 +72,35 @@ namespace HeMaNe.Web.Service.Concrete
 
         public void Edit(UserDto userDto)
         {
+            if (this.CheckInputPassword(userDto.Password))
+            {
+                throw new Exception("Passwort wurde vor dem versenden an den Server nicht gehashed!");
+            }
+
             var user = this._hemaneContext.Users.FirstOrDefault(u => u.Username == userDto.Username);
             if (user == null) return;
 
             if (!string.IsNullOrWhiteSpace(userDto.Password))
             {
+                ComputeHash(userDto);
                 user.Password = userDto.Password;
             }
 
             this._hemaneContext.SaveChanges();
         }
 
+        private readonly Regex _passwordRegex = new Regex("[0-9a-f]{64}");
+
+        private bool CheckInputPassword(string password)
+        {
+            return _passwordRegex.IsMatch(password);
+        }
+
         private static void ComputeHash(UserDto user)
         {
             using (var sha = SHA256.Create())
             {
-                var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(user.Password));
+                var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes($"{user.Id};{user.Password}"));
                 var builder = new StringBuilder();
                 foreach (var t in bytes)
                 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using HeMaNe.Shared.TransferObjects;
 using HeMaNe.Web.Service;
@@ -23,6 +24,12 @@ namespace HeMaNe.Web.Controllers
         {
             _matchService = matchService;
             _userService = userService;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Single(int id)
+        {
+            return Ok(await this._matchService.FindById(id));
         }
 
         [HttpGet("day/{day}")]
@@ -60,5 +67,31 @@ namespace HeMaNe.Web.Controllers
             return Ok();
         }
 
+        [HttpGet("{id}/teams")]
+        public async Task<IActionResult> GetTeams(int id)
+        {
+            return Ok(await this._matchService.FindMatchTeams(id));
+        }
+
+        [HttpPost("teams")]
+        public async Task<IActionResult> CreateTeam([FromBody] MatchTeamDto dto)
+        {
+            await this._matchService.AddMatchTeam(dto);
+            return Ok();
+        }
+
+        [HttpDelete("teams")]
+        public async Task<IActionResult> DeleteTeam([FromBody] MatchTeamDto dto)
+        {
+            await this._matchService.RemoveMatchTeam(dto);
+            return Ok();
+        }
+
+        [HttpPut("teams")]
+        public async Task<IActionResult> UpdateTeam([FromBody] MatchTeamDto dto)
+        {
+            await this._matchService.SetMatchTeamScore(dto);
+            return Ok();
+        }
     }
 }

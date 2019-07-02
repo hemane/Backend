@@ -15,7 +15,9 @@ namespace HeMaNe.Web.Extensions
             {
                 Id = team.Id,
                 ClubId = team.Club.Id,
+                ClubLabel = team.Club.Name,
                 LeagueId = team.League.Id,
+                LeagueLabel = $"{team.League.Sport.Name}/{team.League.Name}",
                 Name = team.Name
             };
         }

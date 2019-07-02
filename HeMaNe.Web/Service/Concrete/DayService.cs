@@ -31,6 +31,7 @@ namespace HeMaNe.Web.Service.Concrete
 
             var model = dto.AsModel(this._context);
             model.Id = 0;
+            model.DateTimeOffset = model.DateTimeOffset.AddHours(2);
             await this._context.Days.AddAsync(model);
             await this._context.SaveChangesAsync();
             return model.Id;

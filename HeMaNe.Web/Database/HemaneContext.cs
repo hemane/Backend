@@ -20,7 +20,7 @@ namespace HeMaNe.Web.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql(this._appSettings.Value.ConnectionString);
+            optionsBuilder.UseMySql(this._appSettings.Value.ConnectionString).UseLazyLoadingProxies();
         }
 
         public DbSet<Club> Clubs { get; set; }

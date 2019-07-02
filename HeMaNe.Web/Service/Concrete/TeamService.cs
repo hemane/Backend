@@ -14,17 +14,19 @@ namespace HeMaNe.Web.Service.Concrete
         private readonly HemaneContext _context;
         private readonly IUserService _userService;
         private readonly IClubService _clubService;
+        private readonly IMatchService _matchService;
 
-        public TeamService(HemaneContext context, IUserService userService, IClubService clubService)
+        public TeamService(HemaneContext context, IUserService userService, IClubService clubService, IMatchService matchService)
         {
             _context = context;
             _userService = userService;
             _clubService = clubService;
+            _matchService = matchService;
         }
 
         public async Task<IEnumerable<TeamDto>> GetAsync(ScopedFilter filter)
         {
-            var teams = await _context.Teams.ToListAsync();
+            var teams = await this.ScopedTeams(filter).ToListAsync();
             return teams.Select(TeamExtensions.MapToTeamDto);
         }
 
@@ -49,7 +51,7 @@ namespace HeMaNe.Web.Service.Concrete
             else
             {
                 team = new Team();
-                _context.Teams.Add(new Team());
+                _context.Teams.Add(team);
             }
 
             await dto.WrapInAsync(team, this._context);
@@ -62,7 +64,7 @@ namespace HeMaNe.Web.Service.Concrete
             await this._context.SaveChangesAsync();
         }
 
-        public async Task<bool> HasAccess(TeamDto teamDto)
+        public bool HasAccess(TeamDto teamDto)
         {
             // Administrator
             var user = this._userService.CurrentUser();
@@ -72,14 +74,44 @@ namespace HeMaNe.Web.Service.Concrete
             }
 
             // Manger vom Club hinter dem Team
-            var club = await this._clubService.GetAsync(teamDto.ClubId);
+            var club = this._clubService.GetAsync(teamDto.ClubId).Result;
             return club.ManagerId == user.Id;
         }
 
-        public async Task<bool> HasAccess(int id)
+        public bool HasAccess(int id)
         {
-            var obj = await this.GetAsync(id);
-            return await this.HasAccess(obj);
+            var obj = this.GetAsync(id).Result;
+            return this.HasAccess(obj);
+        }
+
+        public async Task<IEnumerable<TeamDto>> GetByClubAsync(ScopedFilter filter, int clubId)
+        {
+            var clubs = await this._context.Teams.Where(t => t.Club.Id == clubId).ToListAsync();
+            return clubs.Select(c => c.MapToTeamDto());
+        }
+
+        public async Task<IEnumerable<TeamDto>> GetByLeagueAsync(ScopedFilter filter, int leagueId)
+        {
+            var clubs = await this._context.Teams.Where(t => t.League.Id == leagueId).ToListAsync();
+            return clubs.Select(c => c.MapToTeamDto());
+        }
+
+        public async Task<IEnumerable<TeamDto>> GetForMatchAsync(ScopedFilter filter, int match)
+        {
+            var mo = (await _matchService.FindById(match)).AsModel(this._context);
+            var clubs = await this._context.Teams.Where(t => t.MatchTeams.All(m => m.MatchId != match) && mo.Day.League.Id == t.League.Id).ToListAsync();
+            return clubs.Select(c => c.MapToTeamDto());
+        }
+
+        private IQueryable<Team> ScopedTeams(ScopedFilter filter)
+        {
+            IQueryable<Team> teams = this._context.Teams;
+            if (filter == ScopedFilter.Manager)
+            {
+                var userId = this._userService.CurrentUser().Id;
+                teams = teams.Where(c => c.Club.Manager.Id == userId);
+            }
+            return teams;
         }
     }
 }
